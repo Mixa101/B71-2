@@ -18,10 +18,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from category.views import button, hello_world
+from category.views import product_detail, product_list
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", hello_world),
-    path("dasda", button),
+    path("", product_list, name="product_list"),
+    path("product/<int:id>/", product_detail, name="product_detail"),
 ]

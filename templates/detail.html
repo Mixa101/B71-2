@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }} — GameHub{% endblock %}
+
+{% block content %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'product_list' %}">Каталог</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
+        </ol>
+    </nav>
+
+    <div class="row g-4">
+        <!-- Картинка -->
+        <div class="col-12 col-lg-6">
+            <img src="https://picsum.photos/800/500?random={{ product.pk }}"
+                 class="img-fluid rounded shadow" alt="{{ product.name }}">
+        </div>
+
+        <!-- Основная информация -->
+        <div class="col-12 col-lg-6">
+            <h1 class="mb-3">{{ product.name }}</h1>
+
+            <div class="mb-4">
+                {% if product.price is not None %}
+                    <span class="display-6 fw-bold text-success">{{ product.price }} ₽</span>
+                {% else %}
+                    <span class="badge text-bg-secondary fs-5">Цена не указана</span>
+                {% endif %}
+            </div>
+
+            <ul class="list-group list-group-flush mb-4">
+                <li class="list-group-item d-flex justify-content-between">
+                    <span class="text-muted">Дата выхода</span>
+                    <strong>{{ product.release_date|date:"d.m.Y" }}</strong>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <span class="text-muted">Размер</span>
+                    <strong>{{ product.size }} МБ</strong>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <span class="text-muted">Добавлено на сайт</span>
+                    <strong>{{ product.created_at|date:"d.m.Y H:i" }}</strong>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <span class="text-muted">Обновлено</span>
+                    <strong>{{ product.updated_at|date:"d.m.Y H:i" }}</strong>
+                </li>
+            </ul>
+
+            <div class="d-grid gap-2 d-sm-flex">
+                <button class="btn btn-primary btn-lg px-4" type="button">
+                    <i class="bi bi-cart-plus me-1"></i>В корзину
+                </button>
+                <a href="{% url 'product_list' %}" class="btn btn-outline-secondary btn-lg px-4">
+                    Назад к каталогу
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Минимальные требования -->
+    <div class="card mt-5 shadow-sm">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="bi bi-cpu me-2"></i>Минимальные системные требования</h5>
+        </div>
+        <div class="card-body p-0">
+            {% if product.minimal_requirements %}
+                <table class="table table-striped mb-0">
+                    <tbody>
+                        {% for key, value in product.minimal_requirements.items %}
+                            <tr>
+                                <th scope="row" class="w-25">{{ key }}</th>
+                                <td>{{ value }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="text-muted p-3 mb-0">Требования не указаны.</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
